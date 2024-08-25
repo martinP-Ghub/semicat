@@ -2,6 +2,11 @@ body {
   background: #edf1f5;
   margin-top: 20px;
 }
+
+.userContainer {
+  margin: 0 20px;
+}
+
 .card {
   position: relative;
   display: flex;
@@ -12,6 +17,10 @@ body {
   background-clip: border-box;
   border: 0 solid transparent;
   border-radius: 0;
+}
+.card .card-body {
+  display: flex;
+  justify-content: space-between;
 }
 .btn-circle.btn-lg,
 .btn-group-lg > .btn-circle.btn {
@@ -39,4 +48,7 @@ button:not(:disabled) {
 .user-table tbody tr .category-select {
   max-width: 150px;
   border-radius: 20px;
+}
+.hidden {
+  display: none;
 }
