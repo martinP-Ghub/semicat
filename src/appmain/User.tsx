@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import axios from "axios";
 import { Users } from "../mocks/UserHandlers";
-import "../index.css";
+import { formatDate } from "../utils/util";
 
-const Main = () => {
+const User = () => {
   const header = { "Content-Type": "application/json" };
   const [users, setUsers] = useState<Users[]>([]);
-  // const [user, setUser] = useState("");
-  // const [loading, setLoading] = useState(false);
   const [addUserSw, setAddUserSw] = useState(false);
   const [submitType, setSubmitType] = useState("");
   const [modId, setModId] = useState("");
@@ -32,17 +29,6 @@ const Main = () => {
     initUser();
   }, []);
 
-  const formatDate = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    // const hour = String(date.getHours()).padStart(2, "0");
-    // const min = String(date.getMinutes()).padStart(2, "0");
-    // const sec = String(date.getSeconds()).padStart(2, "0");
-    // ${hour}:${min}:${sec}
-    return `${year}-${month}-${day}`;
-  };
-
   const deleteUser = (id: string) => {
     window.confirm("정말로 삭제하시겠습니까?") &&
       fetch("users/" + id, {
@@ -55,8 +41,7 @@ const Main = () => {
 
   const modBtn = (e: any) => {
     const obj = JSON.parse(e.target.dataset.obj);
-    console.log(obj);
-    console.log(obj.name);
+
     setFormData({
       name: obj.name,
       position: obj.position,
@@ -74,21 +59,6 @@ const Main = () => {
     setAddUserSw(true);
     setSubmitType("save");
   };
-  // const formData = new FormData();
-  // formData.append("name", "test");
-  // formData.append("email", "test@naver.com");
-
-  // try {
-  //   const response = await axios.post("/users", formData, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "*/*",
-  //     },
-  //   });
-  // } catch (error) {
-  //   alert("등록 중 오류가 발생했습니다.");
-  //   console.error("오류가 발생했습니다.", error);
-  // }
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -99,8 +69,6 @@ const Main = () => {
   };
 
   const userSubmit = async () => {
-    console.log(formData);
-    // return false;
     fetch("users", {
       method: "POST",
       headers: header,
@@ -154,7 +122,7 @@ const Main = () => {
                         scope="col"
                         className="border-0 text-uppercase font-medium pl-4"
                       >
-                        #
+                        사번
                       </th>
                       <th
                         scope="col"
@@ -208,7 +176,7 @@ const Main = () => {
                       );
                       return (
                         <tr>
-                          <td className="pl-4">{idx + 1}</td>
+                          <td className="pl-4">{user.id}</td>
                           <td>
                             <h5 className="font-medium mb-0">{user.name}</h5>
                           </td>
@@ -270,7 +238,7 @@ const Main = () => {
 
       <Modal isOpen={addUserSw} ariaHideApp={false}>
         <div className="container mt-5">
-          <h2>유저 {submitType == "mod" ? "수정" : "등록"}</h2>
+          <h2>유저 {submitType === "mod" ? "수정" : "등록"}</h2>
           <form>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">
@@ -348,29 +316,29 @@ const Main = () => {
               />
             </div>
 
-            <button
-              // type="submit"
-              type="button"
-              className={`btn btn-outline-info ${
-                submitType == "mod" && "hidden"
-              }`}
-              onClick={userSubmit}
-            >
-              저장
-            </button>
-            <button
-              // type="submit"
-              type="button"
-              className={`btn btn-outline-info ${
-                submitType == "save" && "hidden"
-              }`}
-              onClick={userMod}
-            >
-              수정
-            </button>
-            <button type="button" className="btn " onClick={modalClose}>
-              취소
-            </button>
+            <div className="btnBox">
+              <button
+                type="button"
+                className={`btn btn-outline-info ${
+                  submitType === "mod" && "hidden"
+                }`}
+                onClick={userSubmit}
+              >
+                저장
+              </button>
+              <button
+                type="button"
+                className={`btn btn-outline-info ${
+                  submitType === "save" && "hidden"
+                }`}
+                onClick={userMod}
+              >
+                수정
+              </button>
+              <button type="button" className="btn " onClick={modalClose}>
+                취소
+              </button>
+            </div>
           </form>
         </div>
       </Modal>
@@ -378,66 +346,4 @@ const Main = () => {
   );
 };
 
-export default Main;
-
-{
-  /* <tr>
-  <td className="pl-4">1</td>
-  <td>
-    <h5 className="font-medium mb-0">Daniel Kristeen</h5>
-  </td>
-  <td>
-    <span className="text-muted">Visual Designer</span>
-  </td>
-  <td>
-    <span className="text-muted">
-      <a
-        href="/cdn-cgi/l/email-protection"
-        className="__cf_email__"
-        data-cfemail="5a3e3b34333f361a2d3f3829332e3f74393537"
-      >
-        [email&#160;protected]
-      </a>
-    </span>
-  </td>
-  <td>
-    <span className="text-muted">999 - 444 - 555</span>
-  </td>
-  <td>
-    <span className="text-muted">15 Mar 1988</span>
-    <br />
-    <span className="text-muted">10: 55 AM</span>
-  </td>
-  <td>
-    <select
-      className="form-control category-select"
-      id="exampleFormControlSelect1"
-    >
-      <option>Modulator</option>
-      <option>Admin</option>
-      <option>User</option>
-      <option>Subscriber</option>
-    </select>
-  </td>
-  <td>
-    <button
-      type="button"
-      className="btn btn-outline-info btn-circle btn-lg btn-circle"
-    >
-      <i className="fa fa-key"></i>
-    </button>
-    <button
-      type="button"
-      className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
-    >
-      <i className="fa fa-trash"></i>
-    </button>
-    <button
-      type="button"
-      className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
-    >
-      <i className="fa fa-edit"></i>
-    </button>
-  </td>
-</tr> */
-}
+export default User;

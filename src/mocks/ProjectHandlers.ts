@@ -1,0 +1,133 @@
+import { http, HttpResponse } from "msw";
+import { users } from "./UserHandlers";
+
+export type Project = {
+  id: number;
+  userId: number;
+  name: string;
+  description?: string;
+  status: number;
+  regDate: number;
+  userName?: string;
+};
+
+const project: Project[] = [
+  {
+    id: 20240001,
+    userId: 1,
+    name: "Project Alpha",
+    description: "Description for Project Alpha",
+    status: 1, //0 inactive 1 active 2 completed
+    regDate: 1724575461470,
+  },
+  {
+    id: 20240002,
+    userId: 1,
+    name: "Project Beta",
+    description: "Description for Project Beta",
+    status: 2,
+    regDate: 1724570461470,
+  },
+  {
+    id: 20240003,
+    userId: 2,
+    name: "Project Gamma",
+    description: "Description for Project Gamma",
+    status: 1,
+    regDate: 1724275461470,
+  },
+  {
+    id: 20240004,
+    userId: 3,
+    name: "Project Delta",
+    description: "Description for Project Delta",
+    status: 0,
+    regDate: 1721275461470,
+  },
+];
+let maxId = 4; // id 고유값 유지를 위해 임시 처리
+
+export const ProjectHandlers = [
+  // PROJECT - GET
+  http.get("/project", () => {
+    const projectReuslt = project.map((prj) => {
+      const user = users.find((u: any) => u.id === prj.userId);
+
+      return {
+        ...prj,
+        userName: user ? user.name : "삭제된 관리자",
+      };
+    });
+
+    return HttpResponse.json(projectReuslt, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }),
+  // PROJECT ADD - POST
+  http.post("/project", async ({ request }) => {
+    const requestData = (await request.json()) as Project;
+    const name = requestData.name;
+    const userId = Number(requestData.userId);
+    const description = requestData.description;
+    const status = requestData.status;
+    const regDate = new Date().getTime();
+
+    const newProject = {
+      id: parseInt(
+        String(new Date().getFullYear()) + String(maxId + 1).padStart(4, "0")
+      ),
+      name,
+      userId,
+      description,
+      status,
+      regDate,
+    };
+    project.push(newProject);
+
+    maxId++;
+
+    return HttpResponse.json(users, { status: 200 });
+  }),
+
+  // DELETE PROJECT - DELETE
+  http.delete("/project/:id", async ({ params }) => {
+    const prjId = parseInt(params.id as string);
+    console.log(prjId);
+
+    // project 배열에서 해당 ID 찾고 삭제합니다.
+    const prjIndex = project.findIndex((prj) => prj.id === prjId);
+    if (prjIndex === -1) {
+      return HttpResponse.json(
+        { message: "Project not found" },
+        { status: 404 }
+      );
+    }
+
+    project.splice(prjIndex, 1);
+
+    return HttpResponse.json(
+      { message: "Project deleted successfully" },
+      { status: 200 }
+    );
+  }),
+
+  // // UPDATE USER - PUT
+  // http.put("/users/:id", async ({ params, request }) => {
+  //   const userId = parseInt(params.id as string);
+  //   const requestData = (await request.json()) as Partial<Users>; // 일부 필드만 업데이트 가능하므로 Partial 사용
+
+  //   // users 배열에서 해당 ID의 사용자를 찾습니다.
+  //   const userIndex = users.findIndex((user) => user.id === userId);
+  //   if (userIndex === -1) {
+  //     return HttpResponse.json({ message: "User not found" }, { status: 404 });
+  //   }
+
+  //   // 사용자의 데이터를 업데이트합니다.
+  //   users[userIndex] = { ...users[userIndex], ...requestData };
+
+  //   return HttpResponse.json(users[userIndex], { status: 200 });
+  // }),
+];

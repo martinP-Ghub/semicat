@@ -3,7 +3,39 @@ body {
   margin-top: 20px;
 }
 
-.userContainer {
+h2 {
+  margin-bottom: 40px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.nav img {
+  margin-left: 20px;
+  margin-right: 30px;
+}
+
+nav {
+  height: 46px;
+}
+nav ul {
+  display: flex;
+  height: 46px;
+}
+nav ul li {
+  width: 100px;
+  list-style: none;
+  align-content: center;
+}
+
+nav ul li a {
+  color: black;
+}
+
+.userContainer,
+.projectContainer {
   margin: 0 20px;
 }
 
@@ -51,4 +83,10 @@ button:not(:disabled) {
 }
 .hidden {
   display: none;
+}
+
+.btnBox {
+  width: 120px;
+  margin-left: auto;
+  margin-top: 200px;
 }

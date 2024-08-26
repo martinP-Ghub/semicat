@@ -10,7 +10,7 @@ export type Users = {
   regDate: number;
 };
 
-const users: Users[] = [
+export const users: Users[] = [
   {
     id: 1,
     name: "John Doe",
@@ -40,11 +40,13 @@ const users: Users[] = [
   },
 ];
 
+let maxId = 3; // id 고유값 유지를 위해 임시 처리
+
 export const UserHandlers = [
   // USERLIST - GET
   http.get("/users", () => {
     return HttpResponse.json(users, {
-      status: 201,
+      status: 200,
       headers: {
         "Content-Type": "application/json",
       },
@@ -61,7 +63,7 @@ export const UserHandlers = [
     const regDate = new Date().getTime();
 
     const newUser = {
-      id: users[users.length - 1].id + 1,
+      id: maxId + 1,
       name,
       position,
       phone,
@@ -71,7 +73,9 @@ export const UserHandlers = [
     };
     users.push(newUser);
 
-    return HttpResponse.json(users, { status: 201 });
+    maxId++;
+
+    return HttpResponse.json(users, { status: 200 });
   }),
 
   // DELETE USER - DELETE
