@@ -1,17 +1,8 @@
 import { http, HttpResponse } from "msw";
 import { users } from "./UserHandlers";
+import { ProjectType } from "../type/Type";
 
-export type Project = {
-  id: number;
-  userId: number;
-  name: string;
-  description?: string;
-  status: number;
-  regDate: number;
-  userName?: string;
-};
-
-const project: Project[] = [
+const project: ProjectType[] = [
   {
     id: 20240001,
     userId: 1,
@@ -66,9 +57,43 @@ export const ProjectHandlers = [
       },
     });
   }),
+  // PROJECT SEARCH - GET
+  http.get(
+    "project/searchType=:searchType&searchText=:searchText",
+    async ({ params }) => {
+      const type = params.searchType as keyof ProjectType;
+      let text = String(params.searchText).toLowerCase();
+
+      const prjList = project.filter((prj) => {
+        const value = prj[type];
+
+        if (typeof value == "string") {
+          return value.toLowerCase().includes(text);
+        } else if (typeof value == "number") {
+          return value.toString().includes(text);
+        }
+      });
+
+      return HttpResponse.json(prjList, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+  ),
+  // // PROJECT USER LINK LIST - GET
+  // http.get("/project/:userId", ({ params }) => {
+  //   const userId = parseInt(params.userId as string);
+
+  //   const prjList = project.filter((prj) => prj.userId === userId);
+
+  //   return HttpResponse.json(prjList, { status: 200 });
+  // }),
+
   // PROJECT ADD - POST
   http.post("/project", async ({ request }) => {
-    const requestData = (await request.json()) as Project;
+    const requestData = (await request.json()) as ProjectType;
     const name = requestData.name;
     const userId = Number(requestData.userId);
     const description = requestData.description;
@@ -95,7 +120,6 @@ export const ProjectHandlers = [
   // DELETE PROJECT - DELETE
   http.delete("/project/:id", async ({ params }) => {
     const prjId = parseInt(params.id as string);
-    console.log(prjId);
 
     // project 배열에서 해당 ID 찾고 삭제합니다.
     const prjIndex = project.findIndex((prj) => prj.id === prjId);

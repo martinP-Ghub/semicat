@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
-import { Project } from "../mocks/ProjectHandlers";
+// import { Project } from "../mocks/ProjectHandlers";
+import { ProjectType } from "../type/Type";
 import { formatDate } from "../utils/util";
 
 const ProjectList = () => {
   const header = { "Content-Type": "application/json" };
-  const [prj, setPrj] = useState<Project[]>([]);
+  const [prj, setPrj] = useState<ProjectType[]>([]);
   const [addPrjSw, setAddPrjSw] = useState(false);
   const [submitType, setSubmitType] = useState("");
+  const [searchType, setSearchType] = useState("name");
+  const [searchText, setSearchText] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -23,6 +26,19 @@ const ProjectList = () => {
         setPrj(data);
       });
   };
+
+  const search = () => {
+    if (searchText == "") {
+      initProject();
+    } else {
+      fetch("project/searchType=" + searchType + "&searchText=" + searchText)
+        .then((res) => res.json())
+        .then((data) => {
+          setPrj(data);
+        });
+    }
+  };
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({
@@ -124,6 +140,41 @@ const ProjectList = () => {
                 </button>
               </div>
 
+              <div className="searchBox">
+                <select
+                  name="searchType"
+                  id="searchType"
+                  onChange={(e) => setSearchType(e.target.value)}
+                >
+                  <option value="name">Project Name</option>
+                  <option value="status">Status</option>
+                </select>
+                <input
+                  type="search"
+                  name="searchText"
+                  className="searchText"
+                  placeholder="Search Here"
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+                <button type="button" className="btn btn-base" onClick={search}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="feather feather-search"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </button>
+              </div>
+
               <div className="table-responsive">
                 <table className="table no-wrap user-table mb-0">
                   <thead>
@@ -158,18 +209,6 @@ const ProjectList = () => {
                       >
                         status
                       </th>
-                      {/* <th
-                        scope="col"
-                        className="border-0 text-uppercase font-medium"
-                      >
-                        Phone
-                      </th>
-                      <th
-                        scope="col"
-                        className="border-0 text-uppercase font-medium"
-                      >
-                        주소
-                      </th> */}
                       <th
                         scope="col"
                         className="border-0 text-uppercase font-medium"
@@ -185,66 +224,79 @@ const ProjectList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {prj.map((prj: any, idx: number) => {
-                      return (
+                    {prj.length > 0 ? (
+                      prj.map((prj: any, idx: number) => {
+                        return (
+                          <tr>
+                            <td className="pl-4">{prj.id}</td>
+                            <td>
+                              <h5 className="font-medium mb-0">{prj.name}</h5>
+                            </td>
+                            <td>
+                              <span className="text-muted">
+                                {prj.description}
+                              </span>
+                            </td>
+                            <td>
+                              <span className="text-muted">{prj.userName}</span>
+                            </td>
+                            <td>
+                              <span className="text-muted">
+                                {prj.status === 0
+                                  ? "Inactive"
+                                  : prj.status === 1
+                                  ? "Active"
+                                  : "Completed"}
+                              </span>
+                            </td>
+                            <td>
+                              <span className="text-muted">
+                                {formatDate(new Date(prj.regDate))}
+                              </span>
+                            </td>
+                            <td>
+                              <button
+                                type="button"
+                                className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
+                                onClick={() => deleteProject(`${prj.id}`)}
+                              >
+                                <i className="fa fa-trash"></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
+                                // onClick={(e) => modBtn(e)}
+                                // data-obj={prj && JSON.stringify(prj)}
+                              >
+                                <i
+                                  className="fa fa-edit"
+                                  onClick={() => {
+                                    return false;
+                                  }}
+                                ></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
+                              >
+                                <i
+                                  className="fa fa-file-text"
+                                  aria-hidden="true"
+                                ></i>
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <>
                         <tr>
-                          <td className="pl-4">{prj.id}</td>
-                          <td>
-                            <h5 className="font-medium mb-0">{prj.name}</h5>
-                          </td>
-                          <td>
-                            <span className="text-muted">
-                              {prj.description}
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-muted">{prj.userName}</span>
-                          </td>
-                          <td>
-                            <span className="text-muted">
-                              {prj.status === 0
-                                ? "Inactive"
-                                : prj.status === 1
-                                ? "Active"
-                                : "Completed"}
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-muted">
-                              {formatDate(new Date(prj.regDate))}
-                            </span>
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
-                              onClick={() => deleteProject(`${prj.id}`)}
-                            >
-                              <i className="fa fa-trash"></i>
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
-                              // onClick={(e) => modBtn(e)}
-                              // data-obj={prj && JSON.stringify(prj)}
-                            >
-                              <i
-                                className="fa fa-edit"
-                                onClick={() => {
-                                  return false;
-                                }}
-                              ></i>
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-outline-info btn-circle btn-lg btn-circle ml-2"
-                            >
-                              <i className="fa fa-folder"></i>
-                            </button>
+                          <td colSpan={7} className="nonData">
+                            데이터가 없습니다.
                           </td>
                         </tr>
-                      );
-                    })}
+                      </>
+                    )}
                   </tbody>
                 </table>
               </div>

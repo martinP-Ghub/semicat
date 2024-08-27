@@ -39,6 +39,43 @@ nav ul li a {
   margin: 0 20px;
 }
 
+.searchBox {
+  display: flex;
+  background-color: #edf1f5;
+  width: 450px;
+  margin: auto;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.searchBox #searchType,
+.searchBox .searchText {
+  display: block;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: transparent;
+  background-clip: padding-box;
+  border: none;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.searchBox #searchType {
+  width: 150px;
+}
+
+.searchBox .searchText {
+  width: 300px;
+}
+
+.felxBetween {
+  display: flex;
+  justify-content: space-between;
+}
 .card {
   position: relative;
   display: flex;
@@ -89,4 +126,8 @@ button:not(:disabled) {
   width: 120px;
   margin-left: auto;
   margin-top: 200px;
+}
+
+.nonData {
+  text-align: center;
 }

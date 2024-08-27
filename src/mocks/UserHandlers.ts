@@ -1,16 +1,7 @@
 import { http, HttpResponse } from "msw";
+import { UserType } from "../type/Type";
 
-export type Users = {
-  id: number;
-  name: string;
-  position?: string;
-  phone?: string;
-  email?: string;
-  addr?: string;
-  regDate: number;
-};
-
-export const users: Users[] = [
+export const users: UserType[] = [
   {
     id: 1,
     name: "John Doe",
@@ -52,9 +43,36 @@ export const UserHandlers = [
       },
     });
   }),
+
+  // USER SEARCH - GET
+  http.get(
+    "/users/searchType=:searchType&searchText=:searchText",
+    async ({ params }) => {
+      const type = params.searchType as keyof UserType;
+      let text = String(params.searchText).toLowerCase();
+
+      const userList = users.filter((user) => {
+        const value = user[type];
+
+        if (typeof value == "string") {
+          return value.toLowerCase().includes(text);
+        } else if (typeof value == "number") {
+          return value.toString().includes(text);
+        }
+      });
+
+      return HttpResponse.json(userList, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+  ),
+
   // USER ADD - POST
   http.post("/users", async ({ request }) => {
-    const requestData = (await request.json()) as Users;
+    const requestData = (await request.json()) as UserType;
     const name = requestData.name;
     const position = requestData.position;
     const phone = requestData.phone;
@@ -101,7 +119,7 @@ export const UserHandlers = [
   // UPDATE USER - PUT
   http.put("/users/:id", async ({ params, request }) => {
     const userId = parseInt(params.id as string);
-    const requestData = (await request.json()) as Partial<Users>; // 일부 필드만 업데이트 가능하므로 Partial 사용
+    const requestData = (await request.json()) as Partial<UserType>; // 일부 필드만 업데이트 가능하므로 Partial 사용
 
     // users 배열에서 해당 ID의 사용자를 찾습니다.
     const userIndex = users.findIndex((user) => user.id === userId);
