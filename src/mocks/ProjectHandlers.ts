@@ -82,14 +82,6 @@ export const ProjectHandlers = [
       });
     }
   ),
-  // // PROJECT USER LINK LIST - GET
-  // http.get("/project/:userId", ({ params }) => {
-  //   const userId = parseInt(params.userId as string);
-
-  //   const prjList = project.filter((prj) => prj.userId === userId);
-
-  //   return HttpResponse.json(prjList, { status: 200 });
-  // }),
 
   // PROJECT ADD - POST
   http.post("/project", async ({ request }) => {
@@ -138,20 +130,23 @@ export const ProjectHandlers = [
     );
   }),
 
-  // // UPDATE USER - PUT
-  // http.put("/users/:id", async ({ params, request }) => {
-  //   const userId = parseInt(params.id as string);
-  //   const requestData = (await request.json()) as Partial<Users>; // 일부 필드만 업데이트 가능하므로 Partial 사용
+  // UPDATE PROJECT - PUT
+  http.put("/project/:id", async ({ params, request }) => {
+    const projectId = parseInt(params.id as string);
+    const requestData = (await request.json()) as Partial<ProjectType>;
 
-  //   // users 배열에서 해당 ID의 사용자를 찾습니다.
-  //   const userIndex = users.findIndex((user) => user.id === userId);
-  //   if (userIndex === -1) {
-  //     return HttpResponse.json({ message: "User not found" }, { status: 404 });
-  //   }
+    // project 배열에서 해당 ID를 찾습니다.
+    const projectIndex = project.findIndex((prj) => prj.id === projectId);
+    if (projectIndex === -1) {
+      return HttpResponse.json(
+        { message: "Project not found" },
+        { status: 404 }
+      );
+    }
 
-  //   // 사용자의 데이터를 업데이트합니다.
-  //   users[userIndex] = { ...users[userIndex], ...requestData };
+    // 프로젝트의 데이터를 업데이트합니다.
+    project[projectIndex] = { ...project[projectIndex], ...requestData };
 
-  //   return HttpResponse.json(users[userIndex], { status: 200 });
-  // }),
+    return HttpResponse.json(project[projectIndex], { status: 200 });
+  }),
 ];

@@ -72,7 +72,7 @@ nav ul li a {
   width: 300px;
 }
 
-.felxBetween {
+.flexBetween {
   display: flex;
   justify-content: space-between;
 }
@@ -118,6 +118,10 @@ button:not(:disabled) {
   max-width: 150px;
   border-radius: 20px;
 }
+.user-view-table tr td:first-child {
+  width: 200px;
+}
+
 .hidden {
   display: none;
 }

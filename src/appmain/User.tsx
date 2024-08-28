@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-// import { Users } from "../mocks/UserHandlers";
+
 import { UserType } from "../type/Type";
 import { formatDate } from "../utils/util";
 
@@ -53,7 +53,8 @@ const User = () => {
   };
 
   const modBtn = (e: any) => {
-    const obj = JSON.parse(e.target.dataset.obj);
+    const buttonElement = e.currentTarget;
+    const obj = JSON.parse(buttonElement.dataset.obj);
 
     setFormData({
       name: obj.name,
@@ -434,7 +435,7 @@ const User = () => {
         }}
       >
         <div className="">
-          <div className="felxBetween">
+          <div className="flexBetween">
             <h2>담당 프로젝트</h2>
             <button
               type="button"
