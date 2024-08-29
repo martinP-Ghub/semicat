@@ -3,6 +3,7 @@ import Modal from "react-modal";
 
 import { UserType } from "../type/Type";
 import { formatDate } from "../utils/util";
+import { valid } from "semver";
 
 const User = () => {
   const header = { "Content-Type": "application/json" };
@@ -28,6 +29,48 @@ const User = () => {
       .then((data) => {
         setUsers(data);
       });
+  };
+
+  const valid = () => {
+    let chk = true;
+
+    if (chk && formData.name === "") {
+      alert(`이름 값이 비어 있습니다. 확인해주세요.`);
+      chk = false;
+    }
+
+    if (chk && formData.position === "") {
+      alert(`직급 값이 비어 있습니다. 확인해주세요.`);
+      chk = false;
+    }
+
+    if (chk && formData.email === "") {
+      alert(`Email 값이 비어 있습니다. 확인해주세요.`);
+      chk = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (chk && !emailRegex.test(formData.email)) {
+      alert(`Email 형식이 잘 못 되었습니다.`);
+      chk = false;
+    }
+
+    if (chk && formData.phone === "") {
+      alert(`Phone 값이 비어 있습니다. 확인해주세요.`);
+      chk = false;
+    }
+
+    const phoneRegex = /^(010)-?\d{3,4}-?\d{4}$/;
+    if (chk && !phoneRegex.test(formData.phone)) {
+      alert(`Phone 형식이 잘 못 되었습니다.`);
+      chk = false;
+    }
+
+    if (chk && formData.addr === "") {
+      alert(`주소 값이 비어 있습니다. 확인해주세요.`);
+      chk = false;
+    }
+    return chk;
   };
 
   const search = () => {
@@ -83,25 +126,27 @@ const User = () => {
   };
 
   const userSubmit = async () => {
-    fetch("users", {
-      method: "POST",
-      headers: header,
-      body: JSON.stringify(formData),
-    }).then(() => {
-      modalClose();
-      initUser();
-    });
+    valid() &&
+      fetch("users", {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(formData),
+      }).then(() => {
+        modalClose();
+        initUser();
+      });
   };
 
   const userMod = async () => {
-    fetch("users/" + modId, {
-      method: "PUT",
-      headers: header,
-      body: JSON.stringify(formData),
-    }).then(() => {
-      modalClose();
-      initUser();
-    });
+    valid() &&
+      fetch("users/" + modId, {
+        method: "PUT",
+        headers: header,
+        body: JSON.stringify(formData),
+      }).then(() => {
+        modalClose();
+        initUser();
+      });
   };
 
   const modalClose = () => {
@@ -161,6 +206,9 @@ const User = () => {
                   className="searchText"
                   placeholder="검색어를 입력해 주세요"
                   onChange={(e) => setSearchText(e.target.value)}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") search();
+                  }}
                 />
                 <button type="button" className="btn btn-base" onClick={search}>
                   <svg
@@ -376,7 +424,7 @@ const User = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                maxLength={13}
+                maxLength={11}
                 required
               />
             </div>

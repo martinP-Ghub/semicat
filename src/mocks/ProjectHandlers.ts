@@ -66,6 +66,9 @@ export const ProjectHandlers = [
 
       const prjList = project.filter((prj) => {
         const value = prj[type];
+        const user = users.find((u: any) => u.id === prj.userId);
+
+        prj.userName = user ? user.name : "삭제된 관리자";
 
         if (typeof value == "string") {
           return value.toLowerCase().includes(text);

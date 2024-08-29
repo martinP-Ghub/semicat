@@ -45,6 +45,26 @@ const ProjectList = () => {
       });
   };
 
+  const valid = () => {
+    let chk = true;
+    if (chk && formData.name === "") {
+      alert(`Project values are empty, please check.`);
+      chk = false;
+    }
+
+    if (chk && formData.description === "") {
+      alert(`Description values are empty, please check.`);
+      chk = false;
+    }
+
+    if (chk && formData.userName === "") {
+      alert(`Manager values are empty, please check.`);
+      chk = false;
+    }
+
+    return chk;
+  };
+
   const search = () => {
     if (searchText == "") {
       initProject();
@@ -70,14 +90,15 @@ const ProjectList = () => {
   };
 
   const prjSubmit = async () => {
-    fetch("project", {
-      method: "POST",
-      headers: { "Content-Type": "multipart/form-data" },
-      body: JSON.stringify(formData),
-    }).then(() => {
-      modalClose();
-      initProject();
-    });
+    valid() &&
+      fetch("project", {
+        method: "POST",
+        headers: { "Content-Type": "multipart/form-data" },
+        body: JSON.stringify(formData),
+      }).then(() => {
+        modalClose();
+        initProject();
+      });
   };
 
   const modBtn = (e: any) => {
@@ -98,15 +119,15 @@ const ProjectList = () => {
   };
 
   const prjMod = async () => {
-    console.log(formData);
-    fetch("project/" + modId, {
-      method: "PUT",
-      headers: { "Content-Type": "multipart/form-data" },
-      body: JSON.stringify(formData),
-    }).then(() => {
-      modalClose();
-      initProject();
-    });
+    valid() &&
+      fetch("project/" + modId, {
+        method: "PUT",
+        headers: { "Content-Type": "multipart/form-data" },
+        body: JSON.stringify(formData),
+      }).then(() => {
+        modalClose();
+        initProject();
+      });
   };
 
   const prjInfo = (e: any) => {
@@ -203,7 +224,7 @@ const ProjectList = () => {
                   onChange={(e) => setSearchType(e.target.value)}
                 >
                   <option value="name">Project Name</option>
-                  <option value="status">Status</option>
+                  <option value="userName">Status</option>
                 </select>
                 <input
                   type="search"
@@ -211,6 +232,9 @@ const ProjectList = () => {
                   className="searchText"
                   placeholder="Search Here"
                   onChange={(e) => setSearchText(e.target.value)}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") search();
+                  }}
                 />
                 <button type="button" className="btn btn-base" onClick={search}>
                   <svg
@@ -509,6 +533,9 @@ const ProjectList = () => {
               placeholder="Search Here"
               value={mSearchText}
               onChange={(e) => setMSearchText(e.target.value)}
+              onKeyUp={(e) => {
+                if (e.key === "Enter") managerSearch();
+              }}
             />
             <button
               type="button"
@@ -613,7 +640,7 @@ const ProjectList = () => {
       >
         <div className="">
           <div className="flexBetween">
-            <h2>Project Infomation</h2>
+            <h2>Project Detail Infomation</h2>
             <button
               type="button"
               className="btn btn-outline-info"

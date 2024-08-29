@@ -1,10 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+} from "react-router-dom";
 
 import UserList from "./appmain/User";
 import ProjectList from "./appmain/Project";
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Router>
       <div>
@@ -26,6 +32,7 @@ const App: React.FC = () => {
           </nav>
         </div>
         <Routes>
+          <Route path="/" element={<Navigate to="/user" />} />
           <Route path="/user" element={<UserList />} />
           <Route path="/project" element={<ProjectList />} />
         </Routes>
