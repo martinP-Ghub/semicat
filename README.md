@@ -15,6 +15,8 @@ Open [http://localhost:3000](http://localhost:3000)
  + 2차 GET -> POST -> DELETE -> PUT -> search(GET) 순으로 API 구성 과 동시에 view 페이지 구성
  + 3차 편의성 증대를 위한 추가 작업 실시 
 
+ ++ 기본 퍼블리싱 구조는 bootstrap sample page 를 바탕으로 커스텀하였습니다.
+
 
 
 ## • 결과 설명
