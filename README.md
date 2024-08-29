@@ -1,75 +1,37 @@
 <<<<<<< HEAD
-# Getting Started with Create React App
+# 어드민 (유저, 프로젝트) ERP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 서비스 개발 : React , MSW
 
-## Available Scripts
-
-In the project directory, you can run:
-
+## 구동 방법
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Open [http://localhost:3000](http://localhost:3000) 
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## • 수행 과정 
+ + 1차 기본 셋팅(React 설치 및 셋팅 , MockAPi(MSW 로 serviceWorker를 통해 BackEnd API))구성
+ + 2차 GET -> POST -> DELETE -> PUT -> search(GET) 순으로 API 구성 과 동시에 view 페이지 구성
+ + 3차 편의성 증대를 위한 추가 작업 실시 
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## • 결과 설명
+ - 구성 : user, project 
+  1. user\
+    - 사번, 이름, 직급, Email, Phone, 주소, 등록일 로 구성     \
+    - 관리 -> [추가], [삭제], [수정], [관리 프로젝트 리스트] 버튼으로 구성    \
+    - 검색기능 -> 이름, Email 을 기준으로 검색 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  2. project\
+    - Project Seq, Project Name, Description, Manager, Status, regDate 로 구성\
+    - 관리 -> [추가], [삭제], [수정], [프로젝트 상세] 버튼으로 구성\
+    - 메인 검색기능 -> Project Name 을 기준으로 검색\
+    - 서브 검색기능(등록시 manager 검색) -> 유저 이름, Email 을 기준으로 검색
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
 # semicat
 semicat project
 >>>>>>> origin/main
