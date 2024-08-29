@@ -224,7 +224,7 @@ const ProjectList = () => {
                   onChange={(e) => setSearchType(e.target.value)}
                 >
                   <option value="name">Project Name</option>
-                  <option value="userName">Status</option>
+                  {/* <option value="userName">Status</option> */}
                 </select>
                 <input
                   type="search"
